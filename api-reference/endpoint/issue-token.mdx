@@ -1,0 +1,53 @@
+---
+title: "Issue Token"
+api: "POST /auth/token"
+---
+
+Issue an authentication token using different credential types.
+
+This endpoint demonstrates **oneOf** with discriminator for different grant types:
+- `password` - Username and password authentication
+- `api_key` - API key authentication
+- `refresh_token` - Refresh an existing token
+
+<RequestExample>
+```json Password grant
+{
+  "grantType": "password",
+  "username": "mariam",
+  "password": "••••••••"
+}
+```
+
+```json API key grant
+{
+  "grantType": "api_key",
+  "apiKey": "thn_live_abc123"
+}
+```
+
+```json Refresh token grant
+{
+  "grantType": "refresh_token",
+  "refreshToken": "rft_123456"
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "tokenType": "Bearer",
+  "expiresIn": 3600,
+  "refreshToken": "rft_789012"
+}
+```
+
+```json 401
+{
+  "code": "UNAUTHORIZED",
+  "message": "Invalid credentials"
+}
+```
+</ResponseExample>

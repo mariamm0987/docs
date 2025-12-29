@@ -1,0 +1,517 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Complex Request Body Composition Demo API",
+    "version": "1.0.0",
+    "description": "OpenAPI 3.1 spec demonstrating complex request body schemas using oneOf, anyOf, and allOf for request bodies. Includes multiple request examples per endpoint."
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com"
+    }
+  ],
+  "tags": [
+    { "name": "Orders" },
+    { "name": "Search" },
+    { "name": "Auth" }
+  ],
+  "paths": {
+    "/orders": {
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Create an order (allOf + oneOf + anyOf)",
+        "description": "Request body shows: allOf (BaseOrder + OrderCreateFields), oneOf (delivery method is either shipping OR pickup), anyOf (provide at least one customer identifier: email and/or customerId and/or phone).",
+        "operationId": "createOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  { "$ref": "#/components/schemas/BaseOrder" },
+                  { "$ref": "#/components/schemas/OrderCreateFields" }
+                ]
+              },
+              "examples": {
+                "ship_with_email": {
+                  "summary": "Ship order, customer by email",
+                  "value": {
+                    "requestId": "req_1001",
+                    "channel": "web",
+                    "currency": "USD",
+                    "items": [
+                      { "sku": "SKU-RED-TSHIRT", "quantity": 2, "unitPrice": 1999 }
+                    ],
+                    "customer": {
+                      "email": "buyer@example.com"
+                    },
+                    "delivery": {
+                      "type": "shipping",
+                      "address": {
+                        "line1": "1 Main St",
+                        "city": "Tbilisi",
+                        "postalCode": "0105",
+                        "country": "GE"
+                      }
+                    },
+                    "discounts": [
+                      { "type": "percent", "value": 10 }
+                    ]
+                  }
+                },
+                "pickup_with_customerId_and_phone": {
+                  "summary": "Pickup order, customerId + phone",
+                  "value": {
+                    "requestId": "req_1002",
+                    "channel": "pos",
+                    "currency": "EUR",
+                    "items": [
+                      { "sku": "SKU-MUG", "quantity": 1, "unitPrice": 1299 }
+                    ],
+                    "customer": {
+                      "customerId": "cus_abc123",
+                      "phone": "+995599123456"
+                    },
+                    "delivery": {
+                      "type": "pickup",
+                      "storeId": "store_12",
+                      "pickupWindow": {
+                        "start": "2025-12-29T12:00:00Z",
+                        "end": "2025-12-29T16:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderCreated" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "tags": ["Search"],
+        "summary": "Search with flexible filters (anyOf + allOf)",
+        "description": "Demonstrates: allOf (BaseSearchRequest + SearchQuery), anyOf (filters can be any combination of dateRange, tags, ownerId, status; at least one is required).",
+        "operationId": "search",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  { "$ref": "#/components/schemas/BaseSearchRequest" },
+                  { "$ref": "#/components/schemas/SearchQuery" }
+                ]
+              },
+              "examples": {
+                "by_text_and_tags": {
+                  "summary": "Text query + tags filter",
+                  "value": {
+                    "requestId": "srch_001",
+                    "limit": 25,
+                    "query": {
+                      "text": "invoice",
+                      "filters": {
+                        "tags": ["finance", "2025"]
+                      }
+                    }
+                  }
+                },
+                "by_owner_and_date": {
+                  "summary": "Owner + date range",
+                  "value": {
+                    "requestId": "srch_002",
+                    "limit": 10,
+                    "query": {
+                      "text": "payments",
+                      "filters": {
+                        "ownerId": "usr_99",
+                        "dateRange": {
+                          "from": "2025-01-01",
+                          "to": "2025-12-31"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SearchResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/token": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Issue an auth token (oneOf)",
+        "description": "Demonstrates oneOf for different credential types.",
+        "operationId": "issueToken",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  { "$ref": "#/components/schemas/PasswordGrant" },
+                  { "$ref": "#/components/schemas/ApiKeyGrant" },
+                  { "$ref": "#/components/schemas/RefreshTokenGrant" }
+                ],
+                "discriminator": {
+                  "propertyName": "grantType",
+                  "mapping": {
+                    "password": "#/components/schemas/PasswordGrant",
+                    "api_key": "#/components/schemas/ApiKeyGrant",
+                    "refresh_token": "#/components/schemas/RefreshTokenGrant"
+                  }
+                }
+              },
+              "examples": {
+                "password": {
+                  "summary": "Password grant",
+                  "value": {
+                    "grantType": "password",
+                    "username": "mariam",
+                    "password": "••••••••"
+                  }
+                },
+                "api_key": {
+                  "summary": "API key grant",
+                  "value": {
+                    "grantType": "api_key",
+                    "apiKey": "thn_live_abc123"
+                  }
+                },
+                "refresh": {
+                  "summary": "Refresh token grant",
+                  "value": {
+                    "grantType": "refresh_token",
+                    "refreshToken": "rft_123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token issued",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "details": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "BaseOrder": {
+        "type": "object",
+        "required": ["requestId", "channel", "currency", "items"],
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "description": "Client-generated idempotency key."
+          },
+          "channel": {
+            "type": "string",
+            "enum": ["web", "mobile", "pos", "api"]
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3,
+            "description": "ISO 4217 currency code."
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/components/schemas/OrderItem" }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "OrderCreateFields": {
+        "type": "object",
+        "required": ["customer", "delivery"],
+        "properties": {
+          "customer": { "$ref": "#/components/schemas/CustomerIdentifier" },
+          "delivery": { "$ref": "#/components/schemas/DeliveryMethod" },
+          "discounts": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Discount" }
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "required": ["sku", "quantity", "unitPrice"],
+        "properties": {
+          "sku": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "unitPrice": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Minor units (e.g., cents)."
+          }
+        }
+      },
+      "Discount": {
+        "type": "object",
+        "required": ["type", "value"],
+        "properties": {
+          "type": { "type": "string", "enum": ["percent", "fixed"] },
+          "value": {
+            "type": "number",
+            "description": "Percent (0-100) or fixed minor units depending on type."
+          }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "type": { "const": "percent" } } },
+            "then": { "properties": { "value": { "minimum": 0, "maximum": 100 } } }
+          },
+          {
+            "if": { "properties": { "type": { "const": "fixed" } } },
+            "then": { "properties": { "value": { "minimum": 0 } } }
+          }
+        ]
+      },
+      "CustomerIdentifier": {
+        "type": "object",
+        "description": "anyOf used to allow providing one or more identifiers. Requires at least one of: email, customerId, phone.",
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "customerId": { "type": "string" },
+          "phone": { "type": "string" }
+        },
+        "anyOf": [
+          { "required": ["email"] },
+          { "required": ["customerId"] },
+          { "required": ["phone"] }
+        ],
+        "additionalProperties": false
+      },
+      "DeliveryMethod": {
+        "description": "oneOf used for mutually exclusive delivery methods.",
+        "oneOf": [
+          { "$ref": "#/components/schemas/ShippingDelivery" },
+          { "$ref": "#/components/schemas/PickupDelivery" }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "shipping": "#/components/schemas/ShippingDelivery",
+            "pickup": "#/components/schemas/PickupDelivery"
+          }
+        }
+      },
+      "ShippingDelivery": {
+        "type": "object",
+        "required": ["type", "address"],
+        "properties": {
+          "type": { "type": "string", "const": "shipping" },
+          "address": { "$ref": "#/components/schemas/Address" }
+        }
+      },
+      "PickupDelivery": {
+        "type": "object",
+        "required": ["type", "storeId", "pickupWindow"],
+        "properties": {
+          "type": { "type": "string", "const": "pickup" },
+          "storeId": { "type": "string" },
+          "pickupWindow": { "$ref": "#/components/schemas/TimeWindow" }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "required": ["line1", "city", "postalCode", "country"],
+        "properties": {
+          "line1": { "type": "string" },
+          "line2": { "type": "string" },
+          "city": { "type": "string" },
+          "postalCode": { "type": "string" },
+          "state": { "type": "string" },
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2,
+            "description": "ISO 3166-1 alpha-2"
+          }
+        }
+      },
+      "TimeWindow": {
+        "type": "object",
+        "required": ["start", "end"],
+        "properties": {
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" }
+        }
+      },
+      "OrderCreated": {
+        "type": "object",
+        "required": ["id", "requestId", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "requestId": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["created", "processing", "completed", "failed"]
+          }
+        }
+      },
+      "BaseSearchRequest": {
+        "type": "object",
+        "required": ["requestId"],
+        "properties": {
+          "requestId": { "type": "string" },
+          "limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 25 },
+          "cursor": { "type": "string" }
+        }
+      },
+      "SearchQuery": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+          "query": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "filters": { "$ref": "#/components/schemas/SearchFilters" }
+            }
+          }
+        }
+      },
+      "SearchFilters": {
+        "type": "object",
+        "properties": {
+          "dateRange": { "$ref": "#/components/schemas/DateRange" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "ownerId": { "type": "string" },
+          "status": { "type": "string", "enum": ["open", "closed", "archived"] }
+        },
+        "anyOf": [
+          { "required": ["dateRange"] },
+          { "required": ["tags"] },
+          { "required": ["ownerId"] },
+          { "required": ["status"] }
+        ],
+        "additionalProperties": false
+      },
+      "DateRange": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string", "format": "date" },
+          "to": { "type": "string", "format": "date" }
+        }
+      },
+      "SearchResponse": {
+        "type": "object",
+        "required": ["items"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "title"],
+              "properties": {
+                "id": { "type": "string" },
+                "title": { "type": "string" },
+                "snippet": { "type": "string" }
+              }
+            }
+          },
+          "nextCursor": { "type": "string" }
+        }
+      },
+      "PasswordGrant": {
+        "type": "object",
+        "required": ["grantType", "username", "password"],
+        "properties": {
+          "grantType": { "type": "string", "const": "password" },
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "ApiKeyGrant": {
+        "type": "object",
+        "required": ["grantType", "apiKey"],
+        "properties": {
+          "grantType": { "type": "string", "const": "api_key" },
+          "apiKey": { "type": "string" }
+        }
+      },
+      "RefreshTokenGrant": {
+        "type": "object",
+        "required": ["grantType", "refreshToken"],
+        "properties": {
+          "grantType": { "type": "string", "const": "refresh_token" },
+          "refreshToken": { "type": "string" }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "required": ["accessToken", "tokenType", "expiresIn"],
+        "properties": {
+          "accessToken": { "type": "string" },
+          "tokenType": { "type": "string", "enum": ["Bearer"] },
+          "expiresIn": { "type": "integer", "minimum": 1 },
+          "refreshToken": { "type": "string" }
+        }
+      }
+    }
+  }
+}

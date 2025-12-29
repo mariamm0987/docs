@@ -1,0 +1,79 @@
+---
+title: "Create Order"
+api: "POST /orders"
+---
+
+Create a new order with complex request body composition.
+
+This endpoint demonstrates:
+- **allOf**: Combines `BaseOrder` + `OrderCreateFields`
+- **oneOf**: Delivery method is either `shipping` OR `pickup`
+- **anyOf**: Customer identifier requires at least one of: `email`, `customerId`, or `phone`
+
+<RequestExample>
+```json Ship order with email
+{
+  "requestId": "req_1001",
+  "channel": "web",
+  "currency": "USD",
+  "items": [
+    { "sku": "SKU-RED-TSHIRT", "quantity": 2, "unitPrice": 1999 }
+  ],
+  "customer": {
+    "email": "buyer@example.com"
+  },
+  "delivery": {
+    "type": "shipping",
+    "address": {
+      "line1": "1 Main St",
+      "city": "Tbilisi",
+      "postalCode": "0105",
+      "country": "GE"
+    }
+  },
+  "discounts": [
+    { "type": "percent", "value": 10 }
+  ]
+}
+```
+
+```json Pickup order with customerId + phone
+{
+  "requestId": "req_1002",
+  "channel": "pos",
+  "currency": "EUR",
+  "items": [
+    { "sku": "SKU-MUG", "quantity": 1, "unitPrice": 1299 }
+  ],
+  "customer": {
+    "customerId": "cus_abc123",
+    "phone": "+995599123456"
+  },
+  "delivery": {
+    "type": "pickup",
+    "storeId": "store_12",
+    "pickupWindow": {
+      "start": "2025-12-29T12:00:00Z",
+      "end": "2025-12-29T16:00:00Z"
+    }
+  }
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201
+{
+  "id": "ord_abc123",
+  "requestId": "req_1001",
+  "status": "created"
+}
+```
+
+```json 400
+{
+  "code": "INVALID_REQUEST",
+  "message": "Missing required field: customer"
+}
+```
+</ResponseExample>

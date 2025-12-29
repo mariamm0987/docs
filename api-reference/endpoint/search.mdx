@@ -1,0 +1,57 @@
+---
+title: "Search"
+api: "POST /search"
+---
+
+Search with flexible filters using complex schema composition.
+
+This endpoint demonstrates:
+- **allOf**: Combines `BaseSearchRequest` + `SearchQuery`
+- **anyOf**: Filters can be any combination of `dateRange`, `tags`, `ownerId`, `status` (at least one required)
+
+<RequestExample>
+```json Text query + tags filter
+{
+  "requestId": "srch_001",
+  "limit": 25,
+  "query": {
+    "text": "invoice",
+    "filters": {
+      "tags": ["finance", "2025"]
+    }
+  }
+}
+```
+
+```json Owner + date range
+{
+  "requestId": "srch_002",
+  "limit": 10,
+  "query": {
+    "text": "payments",
+    "filters": {
+      "ownerId": "usr_99",
+      "dateRange": {
+        "from": "2025-01-01",
+        "to": "2025-12-31"
+      }
+    }
+  }
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "items": [
+    {
+      "id": "doc_123",
+      "title": "Invoice #1234",
+      "snippet": "Payment received for order..."
+    }
+  ],
+  "nextCursor": "cursor_xyz"
+}
+```
+</ResponseExample>
