@@ -1,30 +1,30 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
-  "openapi": ["api-reference/openapi.json"],
+  "name": "Mariam API Docs",
+  "openapi": ["addtionalProperties.yaml"],
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#5B4BFF",
+    "light": "#7C70FF",
+    "dark": "#4536D8",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#5B4BFF",
+      "to": "#7C70FF"
     }
   },
   "topbarLinks": [
     {
-      "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "name": "GitHub Issues",
+      "url": "https://github.com/mariamm0987/docs/issues"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "View on GitHub",
+    "url": "https://github.com/mariamm0987/docs"
   },
   "tabs": [
     {
@@ -34,19 +34,19 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
+      "name": "Developer Docs",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "url": "/introduction"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "name": "API Reference",
+      "icon": "code",
+      "url": "/api-reference/introduction"
     },
     {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "name": "Repository",
+      "icon": "github",
+      "url": "https://github.com/mariamm0987/docs"
     }
   ],
   "navigation": [
@@ -76,27 +76,14 @@
       ]
     },
     {
-      "group": "Orders",
+      "group": "Users",
       "pages": [
-        "api-reference/endpoint/create-order"
-      ]
-    },
-    {
-      "group": "Search",
-      "pages": [
-        "api-reference/endpoint/search"
-      ]
-    },
-    {
-      "group": "Auth",
-      "pages": [
-        "api-reference/endpoint/issue-token"
+        "api-reference/endpoint/bulk-create-users"
       ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "github": "https://github.com/mariamm0987/docs",
+    "x": "https://x.com"
   }
 }
