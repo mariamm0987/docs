@@ -1,0 +1,99 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Mariam API Docs",
+  "colors": {
+    "primary": "#5B4BFF",
+    "light": "#7C70FF",
+    "dark": "#4536D8"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "api": {
+    "openapi": "https://api-staging.getelva.ai/api/public/contracts/6aa3f43f3e6b978841ea01ad/openapi.json"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "development"
+            ]
+          },
+          {
+            "group": "Essentials",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images",
+              "essentials/settings",
+              "essentials/navigation",
+              "essentials/reusable-snippets"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Users",
+            "openapi": "https://api-staging.getelva.ai/api/public/contracts/6aa3f43f3e6b978841ea01ad/openapi.json",
+            "pages": [
+              "GET /user",
+              "GET /user/repos"
+            ]
+          },
+          {
+            "group": "Repositories",
+            "openapi": "https://api-staging.getelva.ai/api/public/contracts/6aa3f43f3e6b978841ea01ad/openapi.json",
+            "pages": [
+              "GET /repos/{owner}/{repo}"
+            ]
+          },
+          {
+            "group": "Issues",
+            "openapi": "https://api-staging.getelva.ai/api/public/contracts/6aa3f43f3e6b978841ea01ad/openapi.json",
+            "pages": [
+              "GET /repos/{owner}/{repo}/issues",
+              "POST /repos/{owner}/{repo}/issues"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub Issues",
+        "href": "https://github.com/mariamm0987/docs/issues"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "View on GitHub",
+      "href": "https://github.com/mariamm0987/docs"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/mariamm0987/docs",
+      "x": "https://x.com"
+    }
+  }
+}
