@@ -76,8 +76,10 @@
       ]
     },
     {
-      "group": "Endpoints",
-      "openapi": "https://api-staging.getelva.ai/api/public/contracts/6aa3f43f3e6b978841ea01ad/openapi.json"
+      "group": "Users",
+      "pages": [
+        "api-reference/endpoint/bulk-create-users"
+      ]
     }
   ],
   "footerSocials": {
