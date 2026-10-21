@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Mariam API Docs",
   "colors": {
-    "primary": "#5B4BFF",
-    "light": "#7C70FF",
-    "dark": "#4536D8"
+    "primary": "#FF4B4B",
+    "light": "#9029EC",
+    "dark": "#1CB4EB"
   },
   "favicon": "/favicon.svg",
   "logo": {
