@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "almond",
   "name": "Mariam API Docs",
   "colors": {
     "primary": "#FF4B4B",
@@ -94,26 +94,11 @@
     "socials": {
       "github": "https://github.com/mariamm0987/docs",
       "x": "https://x.com"
-    },
-    "links": [
-      {
-        "header": "Facebook",
-        "items": [
-          {
-            "label": "lasnd",
-            "href": "https://app.mintlify.com/abc-26245f9c/abc-26245f9c/~/b5994237-6e14-4a25-9fce-c70b8190e424?web=1"
-          }
-        ]
-      },
-      {
-        "header": "instagram",
-        "items": [
-          {
-            "label": "lksnfd",
-            "href": "https://app.mintlify.com/abc-26245f9c/abc-26245f9c/~/b5994237-6e14-4a25-9fce-c70b8190e424?web=1"
-          }
-        ]
-      }
-    ]
+    }
+  },
+  "background": {
+    "color": {
+      "dark": "#05001F"
+    }
   }
 }
