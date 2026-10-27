@@ -23,7 +23,7 @@ layout:
     visible: false
 ---
 
-# dfnkldfgve
+# edited form github
 
 <button type="button" class="button primary" data-action="ask" data-icon="gitbook-assistant">Ask a question...</button>
 
@@ -33,7 +33,7 @@ layout:
 
 {% columns %}
 {% column width="50%" %}
-## Get started in minutes
+## edited
 
 Make your first API call in under 5 minutes.
 
